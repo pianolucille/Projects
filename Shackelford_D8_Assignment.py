@@ -233,8 +233,8 @@ def tournament_selection(pop):
     returns: tuple, the color ordering with the best fitness
     '''
 
-    # contestants = random.sample(pop, 2)  # contestants are 2 random people from pop
-    contestants = sorted(pop, key=lambda x: x[0])[:2]  # contestants are 2 best in the pop
+    contestants = random.sample(pop, 2)  # contestants are 2 random people from pop
+    # contestants = sorted(pop, key=lambda x: x[0])[:2]  # contestants are 2 best in the pop
     option1 = contestants[0]
     option2 = contestants[1]
     if option1[0] >= option2[0]:
@@ -253,7 +253,16 @@ def one_point_crossover(mom, dad):
     mom = mom[1]
     dad = dad[1]
     crossover_pt = randint(0, len(mom)-1)
-    return mom[:crossover_pt] + dad[crossover_pt:]
+    child = mom[:crossover_pt] # start with the first bit of mom...
+
+    for item in (dad[crossover_pt:] + dad):
+        if len(child) < len(colors): # only go til child is correct length
+            if item not in child:
+                child.append(item)
+        else:
+            break
+
+    return child
 
 
 def replace_worst(population, child1, child2, size):
@@ -497,8 +506,8 @@ genetic_algorithm = evolution(colors, num_colors)
 print 'Fitness via evolutionary algorithm:', genetic_algorithm[0]
 
 # Average & standard deviation
-all_stats = stats(colors, rand_color_order, fitness, num_colors)
+# all_stats = stats(colors, rand_color_order, fitness, num_colors)
 print("--- %s seconds ---" % (time.time() - start_time))  # ending my timer
-plot_colors(rand_color_order, all_stats[0][0][0], all_stats[1][0][0], all_stats[2][1])
-plot_stats(all_stats[3], all_stats[4], all_stats[5], num_colors)
-plot_run(all_stats[0][2], all_stats[1][1], num_colors)
+# plot_colors(rand_color_order, all_stats[0][0][0], all_stats[1][0][0], all_stats[2][1])
+# plot_stats(all_stats[3], all_stats[4], all_stats[5], num_colors)
+# plot_run(all_stats[0][2], all_stats[1][1], num_colors)
